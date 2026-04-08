@@ -41,5 +41,24 @@ body {
 
 main {
   flex: 1;
-  @apply container
+  @apply container;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding-inline: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-wrapper {
+    padding-inline: 12px;
+  }
 }
