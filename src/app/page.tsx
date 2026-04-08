@@ -10,7 +10,7 @@ export default function HomePage() {
       />
       <main className="relative z-10 w-full ">
         <div className="content-wrapper page-stack">
-          <h1>Search</h1>
+     
           <SearchForm />
         </div>
       </main>
