@@ -27,7 +27,7 @@ body {
   align-items: center;
   width: 100%;
   min-height: 100svh;
-  background: var(--background);
+  background-color: transparent;
   color: var(--foreground);
   font-family: var(--font-nunito-sans), Arial, Helvetica, sans-serif;
 }
