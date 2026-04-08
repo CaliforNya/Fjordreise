@@ -4,7 +4,7 @@ import { NavBarMobile } from "../navigation/mobile/navbar";
 
 export function Header() {
   return (
-    <header className="w-full border-b border-prussian_blue/20 bg-white">
+    <header className="w-full border-b border-white/40 bg-white/35 backdrop-blur-sm">
       <div className="content-wrapper flex items-center justify-between py-3">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-school_bus_yellow/30">
