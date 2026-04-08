@@ -4,8 +4,8 @@ import { Header } from "@/components/layout/header/header";
 import { Footer } from "@/components/layout/footer/footer";
 
 export const metadata: Metadata = {
-  title: "Template page",
-  description: "Design by Californya Next.js template",
+  title: "Fjordreise App",
+  description: "Plan and browse fjord routes",
 };
 
 export default function RootLayout({
