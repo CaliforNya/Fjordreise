@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
+import { Nunito_Sans } from "next/font/google";
 import "@/assets/styles/globals.css";
 import { Header } from "@/components/layout/header/header";
 import { Footer } from "@/components/layout/footer/footer";
 
+const nunitoSans = Nunito_Sans({
+  subsets: ["latin"],
+  variable: "--font-nunito-sans",
+});
+
 export const metadata: Metadata = {
-  title: "Template page",
-  description: "Design by Californya Next.js template",
+  title: "Fjordreise App",
+  description: "Plan and browse fjord routes",
 };
 
 export default function RootLayout({
@@ -15,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={nunitoSans.variable}>
         <Header />
         {children}
         <Footer />
