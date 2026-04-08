@@ -10,6 +10,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-ink_black: #000814;
+
+  --color-prussian_blue: #001d3d;
+
+  --color-regal_navy: #003566;
+
+  --color-school_bus_yellow: #ffc300;
+
+  --color-gold: #ffd60a;
 }
 
 @media (prefers-color-scheme: dark) {
