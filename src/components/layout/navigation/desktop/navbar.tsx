@@ -2,22 +2,22 @@ import Link from "next/link";
 
 export function NavBarDesktop() {
   return (
-    <nav className="hidden items-center gap-2 md:flex">
+    <nav className="hidden items-center gap-6 md:flex">
       <Link
         href="/"
-        className="rounded-full px-4 py-2 text-sm font-semibold text-prussian_blue transition hover:bg-gold hover:text-ink_black"
+        className="border-b border-transparent py-1 text-base font-medium text-prussian_blue transition hover:border-prussian_blue/40 hover:text-regal_navy"
       >
         Home
       </Link>
       <Link
         href="/results"
-        className="rounded-full px-4 py-2 text-sm font-semibold text-prussian_blue transition hover:bg-gold hover:text-ink_black"
+        className="border-b border-transparent py-1 text-base font-medium text-prussian_blue transition hover:border-prussian_blue/40 hover:text-regal_navy"
       >
         Results
       </Link>
       <Link
         href="/summary"
-        className="rounded-full px-4 py-2 text-sm font-semibold text-prussian_blue transition hover:bg-gold hover:text-ink_black"
+        className="border-b border-transparent py-1 text-base font-medium text-prussian_blue transition hover:border-prussian_blue/40 hover:text-regal_navy"
       >
         Summary
       </Link>
