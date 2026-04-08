@@ -1,5 +1,6 @@
 "use client";
 
+import RouteDropdown from "@/components/RouteDropdown";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -84,30 +85,14 @@ export default function SearchForm() {
           <label className="mb-2 block text-sm font-semibold text-prussian_blue/70">
             Fra
           </label>
-          <select
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-            className="w-full rounded-lg border border-prussian_blue/25 bg-white px-3 py-2.5 text-lg font-semibold text-ink_black focus:outline-none focus:ring-2 focus:ring-prussian_blue/40"
-          >
-            <option>Bergen</option>
-            <option>Stavanger</option>
-            <option>Hirtshals</option>
-          </select>
+          <RouteDropdown value={from} onChange={setFrom} />
         </div>
 
         <div className="border-b border-prussian_blue/10 bg-white/70 p-4">
           <label className="mb-2 block text-sm font-semibold text-prussian_blue/70">
             Til
           </label>
-          <select
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-            className="w-full rounded-lg border border-prussian_blue/25 bg-white px-3 py-2.5 text-lg font-semibold text-ink_black focus:outline-none focus:ring-2 focus:ring-prussian_blue/40"
-          >
-            <option>Bergen</option>
-            <option>Stavanger</option>
-            <option>Hirtshals</option>
-          </select>
+          <RouteDropdown value={to} onChange={setTo} />
         </div>
 
         <div className="border-b border-r border-prussian_blue/10 bg-white/70 p-4">
@@ -161,7 +146,7 @@ export default function SearchForm() {
                         -1
                       )
                     }
-                    className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-prussian_blue/10"
+                    className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-school_bus_yellow/45 hover:text-ink_black active:bg-regal_navy/85 active:text-school_bus_yellow"
                   >
                     -
                   </button>
@@ -176,7 +161,7 @@ export default function SearchForm() {
                         1
                       )
                     }
-                    className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-prussian_blue/10"
+                    className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-school_bus_yellow/45 hover:text-ink_black active:bg-regal_navy/85 active:text-school_bus_yellow"
                   >
                     +
                   </button>
@@ -213,7 +198,7 @@ export default function SearchForm() {
                         -1
                       )
                     }
-                    className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-prussian_blue/10"
+                    className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-school_bus_yellow/45 hover:text-ink_black active:bg-regal_navy/85 active:text-school_bus_yellow"
                   >
                     -
                   </button>
@@ -228,7 +213,7 @@ export default function SearchForm() {
                         1
                       )
                     }
-                    className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-prussian_blue/10"
+                    className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-school_bus_yellow/45 hover:text-ink_black active:bg-regal_navy/85 active:text-school_bus_yellow"
                   >
                     +
                   </button>
