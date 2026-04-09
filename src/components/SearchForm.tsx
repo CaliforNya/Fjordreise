@@ -8,13 +8,18 @@ import { useState } from "react";
 const PORT_OPTIONS = Array.from(
   new Set(pricing.routes.flatMap((route) => [route.from, route.to]))
 );
+type PassengerType = "adult" | "child" | "animal";
+type VehicleType = "car" | "camper" | "motorcycle" | "bicycle";
 
 export default function SearchForm() {
   const router = useRouter();
+  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
 
   const [from, setFrom] = useState("Bergen");
   const [to, setTo] = useState("Stavanger");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(tomorrow);
   const [returnDate, setReturnDate] = useState("");
   const [tripType, setTripType] = useState<"roundtrip" | "oneway">("roundtrip");
   const [passengers, setPassengers] = useState({
@@ -29,33 +34,82 @@ export default function SearchForm() {
     bicycle: 0,
   });
 
-  function updatePassengerCount(
-    type: "adult" | "child" | "animal",
-    delta: number
-  ) {
+  function updatePassengerCount(type: PassengerType, delta: number) {
     setPassengers((prev) => ({
       ...prev,
       [type]: Math.max(0, prev[type] + delta),
     }));
   }
 
-  function updateVehicleCount(
-    vehicle: "car" | "camper" | "motorcycle" | "bicycle",
-    delta: number
-  ) {
+  function updateVehicleCount(vehicle: VehicleType, delta: number) {
     setVehicles((prev) => ({
       ...prev,
       [vehicle]: Math.max(0, prev[vehicle] + delta),
     }));
   }
 
+  const samePorts = from === to;
+  const missingDepartureDate = !date;
+  const today = new Date().toISOString().slice(0, 10);
+  const departureInPast = Boolean(date) && date < today;
+  const missingReturnDate = tripType === "roundtrip" && !returnDate;
+  const invalidDateOrder =
+    tripType === "roundtrip" && Boolean(date) && Boolean(returnDate) && returnDate < date;
+  const totalPassengers =
+    passengers.adult + passengers.child + passengers.animal;
+  const peopleWithoutAnimals = passengers.adult + passengers.child;
+  const motorVehicles = vehicles.car + vehicles.camper + vehicles.motorcycle;
+  const totalVehicles = motorVehicles + vehicles.bicycle;
+  const requiresGroupBooking = totalPassengers > 10;
+  const tooManyMotorVehiclesForAdults = motorVehicles > passengers.adult;
+  const tooManyBicyclesForPeople = vehicles.bicycle > peopleWithoutAnimals;
+  const hasAtLeastOnePaidItem = totalPassengers + totalVehicles > 0;
+  const missingAdultCompanion =
+    passengers.adult < 1 && (passengers.child > 0 || passengers.animal > 0);
+  const missingAdultForVehicle =
+    passengers.adult < 1 && motorVehicles > 0;
+  const validationMessage = samePorts
+    ? "Velg to ulike steder for Fra og Til."
+    : missingDepartureDate
+      ? "Velg utreisedato for å fortsette."
+      : departureInPast
+        ? "Utreisedato kan ikke være i fortiden."
+      : missingReturnDate
+        ? "Velg returdato for tur/retur."
+        : invalidDateOrder
+          ? "Returdato kan ikke være før utreisedato."
+          : !hasAtLeastOnePaidItem
+            ? "Velg minst ett reisende- eller kjøretøyvalg."
+          : missingAdultCompanion
+            ? "Barn og dyr kan ikke reise alene. Legg til minst 1 voksen."
+            : missingAdultForVehicle
+              ? "Kjøretøy krever minst 1 voksen reisende."
+          : requiresGroupBooking
+            ? "Ved mer enn 10 reisende, kontakt salgsavdelingen for gruppebestilling."
+            : tooManyMotorVehiclesForAdults
+              ? "Bil, bobil og MC kan ikke være flere enn antall voksne."
+              : tooManyBicyclesForPeople
+                ? "Antall sykler kan ikke være høyere enn antall personer (voksne + barn)."
+      : "";
+  const canSubmit =
+    !samePorts &&
+    !missingDepartureDate &&
+    !departureInPast &&
+    !missingReturnDate &&
+    !invalidDateOrder &&
+    hasAtLeastOnePaidItem &&
+    !requiresGroupBooking &&
+    !tooManyMotorVehiclesForAdults &&
+    !tooManyBicyclesForPeople &&
+    !missingAdultCompanion &&
+    !missingAdultForVehicle;
+
   const handleSearch = () => {
-    if (!date) return;
+    if (!canSubmit) return;
     const params = new URLSearchParams({
       from,
       to,
       date,
-      returnDate,
       tripType,
       adult: String(passengers.adult),
       child: String(passengers.child),
@@ -65,6 +119,9 @@ export default function SearchForm() {
       motorcycle: String(vehicles.motorcycle),
       bicycle: String(vehicles.bicycle),
     });
+    if (tripType === "roundtrip") {
+      params.set("returnDate", returnDate);
+    }
 
     router.push(`/summary?${params.toString()}`);
   };
@@ -85,7 +142,10 @@ export default function SearchForm() {
         </button>
         <button
           type="button"
-          onClick={() => setTripType("oneway")}
+          onClick={() => {
+            setTripType("oneway");
+            setReturnDate("");
+          }}
           className={`border-b-4 px-4 py-3 text-left text-base font-semibold transition ${
             tripType === "oneway"
               ? "border-school_bus_yellow bg-white text-ink_black"
@@ -119,6 +179,7 @@ export default function SearchForm() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
+            min={today}
             className="w-full rounded-lg border border-prussian_blue/25 bg-white px-3 py-2.5 text-base font-semibold text-ink_black focus:outline-none focus:ring-2 focus:ring-prussian_blue/40"
           />
         </div>
@@ -132,6 +193,7 @@ export default function SearchForm() {
             value={returnDate}
             onChange={(e) => setReturnDate(e.target.value)}
             disabled={tripType === "oneway"}
+            min={date || undefined}
             className="w-full rounded-lg border border-prussian_blue/25 bg-white px-3 py-2.5 text-base font-semibold text-ink_black focus:outline-none focus:ring-2 focus:ring-prussian_blue/40 disabled:opacity-50"
           />
         </div>
@@ -141,11 +203,13 @@ export default function SearchForm() {
             Reisende
           </label>
           <div className="space-y-2 rounded-lg border border-prussian_blue/20 bg-white p-3">
-            {[
-              { key: "adult", label: "Voksen" },
-              { key: "child", label: "Barn" },
-              { key: "animal", label: "Dyr" },
-            ].map((item) => (
+            {(
+              [
+                { key: "adult", label: "Voksen" },
+                { key: "child", label: "Barn (0-12 år)" },
+                { key: "animal", label: "Dyr" },
+              ] as { key: PassengerType; label: string }[]
+            ).map((item) => (
               <div
                 key={item.key}
                 className="flex items-center justify-between gap-3 border-b border-prussian_blue/10 pb-1.5 last:border-b-0 last:pb-0"
@@ -156,27 +220,17 @@ export default function SearchForm() {
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() =>
-                      updatePassengerCount(
-                        item.key as "adult" | "child" | "animal",
-                        -1
-                      )
-                    }
+                    onClick={() => updatePassengerCount(item.key, -1)}
                     className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-school_bus_yellow/45 hover:text-ink_black active:bg-regal_navy/85 active:text-school_bus_yellow"
                   >
                     -
                   </button>
                   <div className="w-12 rounded-md border border-prussian_blue/25 py-1 text-center text-base font-semibold text-ink_black">
-                    {passengers[item.key as keyof typeof passengers]}
+                    {passengers[item.key]}
                   </div>
                   <button
                     type="button"
-                    onClick={() =>
-                      updatePassengerCount(
-                        item.key as "adult" | "child" | "animal",
-                        1
-                      )
-                    }
+                    onClick={() => updatePassengerCount(item.key, 1)}
                     className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-school_bus_yellow/45 hover:text-ink_black active:bg-regal_navy/85 active:text-school_bus_yellow"
                   >
                     +
@@ -192,12 +246,14 @@ export default function SearchForm() {
             Kjøretøy
           </label>
           <div className="space-y-2 rounded-lg border border-prussian_blue/20 bg-white p-3">
-            {[
-              { key: "car", label: "Personbil" },
-              { key: "camper", label: "Bobil" },
-              { key: "motorcycle", label: "MC" },
-              { key: "bicycle", label: "Sykkel" },
-            ].map((item) => (
+            {(
+              [
+                { key: "car", label: "Personbil" },
+                { key: "camper", label: "Bobil" },
+                { key: "motorcycle", label: "MC" },
+                { key: "bicycle", label: "Sykkel" },
+              ] as { key: VehicleType; label: string }[]
+            ).map((item) => (
               <div
                 key={item.key}
                 className="flex items-center justify-between gap-3 border-b border-prussian_blue/10 pb-1.5 last:border-b-0 last:pb-0"
@@ -208,27 +264,17 @@ export default function SearchForm() {
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() =>
-                      updateVehicleCount(
-                        item.key as "car" | "camper" | "motorcycle" | "bicycle",
-                        -1
-                      )
-                    }
+                    onClick={() => updateVehicleCount(item.key, -1)}
                     className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-school_bus_yellow/45 hover:text-ink_black active:bg-regal_navy/85 active:text-school_bus_yellow"
                   >
                     -
                   </button>
                   <div className="w-12 rounded-md border border-prussian_blue/25 py-1 text-center text-base font-semibold text-ink_black">
-                    {vehicles[item.key as keyof typeof vehicles]}
+                    {vehicles[item.key]}
                   </div>
                   <button
                     type="button"
-                    onClick={() =>
-                      updateVehicleCount(
-                        item.key as "car" | "camper" | "motorcycle" | "bicycle",
-                        1
-                      )
-                    }
+                    onClick={() => updateVehicleCount(item.key, 1)}
                     className="h-9 w-9 rounded-full border border-prussian_blue/25 text-lg text-prussian_blue transition hover:bg-school_bus_yellow/45 hover:text-ink_black active:bg-regal_navy/85 active:text-school_bus_yellow"
                   >
                     +
@@ -241,9 +287,14 @@ export default function SearchForm() {
       </div>
 
       <div className="p-4">
+        {validationMessage && (
+          <p className="mb-3 rounded-lg border border-school_bus_yellow bg-school_bus_yellow/40 px-3 py-2 text-sm font-medium text-prussian_blue">
+            {validationMessage}
+          </p>
+        )}
         <button
           onClick={handleSearch}
-          disabled={!date}
+          disabled={!canSubmit}
           className="w-full rounded-full bg-prussian_blue px-6 py-3 text-lg font-semibold text-school_bus_yellow transition hover:bg-regal_navy active:scale-[0.99] active:bg-ink_black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-school_bus_yellow disabled:cursor-not-allowed disabled:bg-prussian_blue/60 disabled:text-gold/80"
         >
           Søk
