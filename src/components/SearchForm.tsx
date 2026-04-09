@@ -66,7 +66,7 @@ export default function SearchForm() {
       bicycle: String(vehicles.bicycle),
     });
 
-    router.push(`/results?${params.toString()}`);
+    router.push(`/summary?${params.toString()}`);
   };
 
   return (
