@@ -1,0 +1,49 @@
+{
+  "routes": [
+    {
+      "from": "Bergen",
+      "to": "Stavanger",
+      "basePrice": 200,
+      "passengers": { "adult": 150, "child": 80, "animal": 50 },
+      "vehicles": { "car": 300, "camper": 500, "motorcycle": 150, "bicycle": 50 }
+    },
+    {
+      "from": "Stavanger",
+      "to": "Bergen",
+      "basePrice": 200,
+      "passengers": { "adult": 150, "child": 80, "animal": 50 },
+      "vehicles": { "car": 300, "camper": 500, "motorcycle": 150, "bicycle": 50 }
+    },
+
+    {
+      "from": "Bergen",
+      "to": "Hirtshals",
+      "basePrice": 500,
+      "passengers": { "adult": 300, "child": 150, "animal": 100 },
+      "vehicles": { "car": 600, "camper": 900, "motorcycle": 300, "bicycle": 100 }
+    },
+    {
+      "from": "Hirtshals",
+      "to": "Bergen",
+      "basePrice": 500,
+      "passengers": { "adult": 300, "child": 150, "animal": 100 },
+      "vehicles": { "car": 600, "camper": 900, "motorcycle": 300, "bicycle": 100 }
+    },
+
+    {
+      "from": "Stavanger",
+      "to": "Hirtshals",
+      "basePrice": 400,
+      "passengers": { "adult": 250, "child": 130, "animal": 80 },
+      "vehicles": { "car": 500, "camper": 800, "motorcycle": 250, "bicycle": 80 }
+    },
+    {
+      "from": "Hirtshals",
+      "to": "Stavanger",
+      "basePrice": 400,
+      "passengers": { "adult": 250, "child": 130, "animal": 80 },
+      "vehicles": { "car": 500, "camper": 800, "motorcycle": 250, "bicycle": 80 }
+    }
+    
+  ]
+}
