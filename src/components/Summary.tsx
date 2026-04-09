@@ -60,55 +60,55 @@ export default function Summary({ data }: { data: SummaryData }) {
   return (
     <section className="rounded-2xl border border-school_bus_yellow/50 bg-white p-6 shadow-sm">
       <h2 className="mb-4 border-b-2 border-school_bus_yellow/70 pb-2 text-2xl text-prussian_blue">
-        Booking Summary
+        Oppsummering
       </h2>
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2 rounded-xl border border-school_bus_yellow/35 bg-[#f7fbff] p-4">
           <h3 className="border-b border-school_bus_yellow/60 pb-2 text-lg font-semibold text-prussian_blue">
-            Trip details
+            Turdetaljer
           </h3>
           <p className="text-prussian_blue/80">
-            Route: {data.from} - {data.to}
+            Rute: {data.from} - {data.to}
           </p>
           <p className="text-prussian_blue/80">
-            Trip type: {data.tripType === "oneway" ? "One way" : "Round trip"}
+            Turtype: {data.tripType === "oneway" ? "En vei" : "Tur/retur"}
           </p>
-          <p className="text-prussian_blue/80">Departure: {data.date || "-"}</p>
+          <p className="text-prussian_blue/80">Utreise: {data.date || "-"}</p>
           <p className="text-prussian_blue/80">
-            Return: {data.tripType === "oneway" ? "-" : data.returnDate || "-"}
+            Retur: {data.tripType === "oneway" ? "-" : data.returnDate || "-"}
           </p>
-          <p className="text-prussian_blue/80">Passengers: {passengersTotal}</p>
+          <p className="text-prussian_blue/80">Reisende: {passengersTotal}</p>
           <p className="text-prussian_blue/80">
-            Vehicles: {car + camper + motorcycle + bicycle}
+            Kjøretøy: {car + camper + motorcycle + bicycle}
           </p>
           {!route && (
             <p className="font-semibold text-red-600">
-              Route pricing not found in pricing.json
+              Fant ingen pris for valgt rute i pricing.json
             </p>
           )}
         </div>
 
         <div className="rounded-xl border border-school_bus_yellow/35 bg-[#f7fbff] p-4">
           <h3 className="mb-3 border-b border-school_bus_yellow/60 pb-2 text-lg font-semibold text-prussian_blue">
-            Price
+            Pris
           </h3>
           <div className="space-y-2 text-prussian_blue/80">
             <div className="flex items-center justify-between">
-              <span>Base fare</span>
+              <span>Grunnpris</span>
               <span>{formatNok(baseFare)}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span>Passengers</span>
+              <span>Reisende</span>
               <span>{formatNok(passengersPrice)}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span>Vehicles</span>
+              <span>Kjøretøy</span>
               <span>{formatNok(vehiclesPrice)}</span>
             </div>
             <div className="my-2 border-t border-school_bus_yellow/70" />
             <div className="flex items-center justify-between text-lg font-semibold text-prussian_blue">
-              <span>Total</span>
+              <span>Totalt</span>
               <span>{formatNok(totalPrice)}</span>
             </div>
           </div>

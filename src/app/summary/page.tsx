@@ -12,24 +12,26 @@ function getParam(
   return value ?? fallback;
 }
 
-export default function SummaryPage({
+export default async function SummaryPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
+  const resolvedSearchParams = await searchParams;
+
   const summaryData = {
-    from: getParam(searchParams, "from", "Bergen"),
-    to: getParam(searchParams, "to", "Stavanger"),
-    date: getParam(searchParams, "date"),
-    returnDate: getParam(searchParams, "returnDate"),
-    tripType: getParam(searchParams, "tripType", "roundtrip"),
-    adult: getParam(searchParams, "adult", "1"),
-    child: getParam(searchParams, "child", "0"),
-    animal: getParam(searchParams, "animal", "0"),
-    car: getParam(searchParams, "car", "0"),
-    camper: getParam(searchParams, "camper", "0"),
-    motorcycle: getParam(searchParams, "motorcycle", "0"),
-    bicycle: getParam(searchParams, "bicycle", "0"),
+    from: getParam(resolvedSearchParams, "from", "Bergen"),
+    to: getParam(resolvedSearchParams, "to", "Stavanger"),
+    date: getParam(resolvedSearchParams, "date"),
+    returnDate: getParam(resolvedSearchParams, "returnDate"),
+    tripType: getParam(resolvedSearchParams, "tripType", "roundtrip"),
+    adult: getParam(resolvedSearchParams, "adult", "1"),
+    child: getParam(resolvedSearchParams, "child", "0"),
+    animal: getParam(resolvedSearchParams, "animal", "0"),
+    car: getParam(resolvedSearchParams, "car", "0"),
+    camper: getParam(resolvedSearchParams, "camper", "0"),
+    motorcycle: getParam(resolvedSearchParams, "motorcycle", "0"),
+    bicycle: getParam(resolvedSearchParams, "bicycle", "0"),
   };
 
   return (
@@ -45,7 +47,7 @@ export default function SummaryPage({
       />
       <main className="w-full !max-w-none !px-0">
         <div className="content-wrapper page-stack pt-6">
-          <h1 className="text-prussian_blue">Opsummering av turen</h1>
+          <h1 className="text-prussian_blue">Oppsummering av turen</h1>
           <Summary data={summaryData} />
         </div>
       </main>
