@@ -29,31 +29,31 @@ type FormSession = {
   vehicles: Record<VehicleType, number>;
 };
 
+const DEFAULT_PASSENGERS: Record<PassengerType, number> = {
+  adult: 1,
+  child: 0,
+  animal: 0,
+};
+const DEFAULT_VEHICLES: Record<VehicleType, number> = {
+  car: 0,
+  camper: 0,
+  motorcycle: 0,
+  bicycle: 0,
+};
+
 export default function SearchForm() {
   const router = useRouter();
   const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000)
     .toISOString()
     .slice(0, 10);
 
-  const defaultPassengers: Record<PassengerType, number> = {
-    adult: 1,
-    child: 0,
-    animal: 0,
-  };
-  const defaultVehicles: Record<VehicleType, number> = {
-    car: 0,
-    camper: 0,
-    motorcycle: 0,
-    bicycle: 0,
-  };
-
   const [from, setFrom] = useState("Bergen");
   const [to, setTo] = useState("Stavanger");
   const [date, setDate] = useState(tomorrow);
   const [returnDate, setReturnDate] = useState("");
   const [tripType, setTripType] = useState<TripType>("roundtrip");
-  const [passengers, setPassengers] = useState(defaultPassengers);
-  const [vehicles, setVehicles] = useState(defaultVehicles);
+  const [passengers, setPassengers] = useState(() => ({ ...DEFAULT_PASSENGERS }));
+  const [vehicles, setVehicles] = useState(() => ({ ...DEFAULT_VEHICLES }));
   const [isSessionReady, setIsSessionReady] = useState(false);
 
   useEffect(() => {
@@ -71,18 +71,18 @@ export default function SearchForm() {
       setReturnDate(parsed.returnDate ?? "");
       setTripType(parsed.tripType === "oneway" ? "oneway" : "roundtrip");
       setPassengers({
-        adult: Math.max(0, parsed.passengers?.adult ?? defaultPassengers.adult),
-        child: Math.max(0, parsed.passengers?.child ?? defaultPassengers.child),
-        animal: Math.max(0, parsed.passengers?.animal ?? defaultPassengers.animal),
+        adult: Math.max(0, parsed.passengers?.adult ?? DEFAULT_PASSENGERS.adult),
+        child: Math.max(0, parsed.passengers?.child ?? DEFAULT_PASSENGERS.child),
+        animal: Math.max(0, parsed.passengers?.animal ?? DEFAULT_PASSENGERS.animal),
       });
       setVehicles({
-        car: Math.max(0, parsed.vehicles?.car ?? defaultVehicles.car),
-        camper: Math.max(0, parsed.vehicles?.camper ?? defaultVehicles.camper),
+        car: Math.max(0, parsed.vehicles?.car ?? DEFAULT_VEHICLES.car),
+        camper: Math.max(0, parsed.vehicles?.camper ?? DEFAULT_VEHICLES.camper),
         motorcycle: Math.max(
           0,
-          parsed.vehicles?.motorcycle ?? defaultVehicles.motorcycle
+          parsed.vehicles?.motorcycle ?? DEFAULT_VEHICLES.motorcycle
         ),
-        bicycle: Math.max(0, parsed.vehicles?.bicycle ?? defaultVehicles.bicycle),
+        bicycle: Math.max(0, parsed.vehicles?.bicycle ?? DEFAULT_VEHICLES.bicycle),
       });
     } catch {
       sessionStorage.removeItem(FORM_STORAGE_KEY);
@@ -214,8 +214,8 @@ export default function SearchForm() {
     setDate(tomorrow);
     setReturnDate("");
     setTripType("roundtrip");
-    setPassengers(defaultPassengers);
-    setVehicles(defaultVehicles);
+    setPassengers({ ...DEFAULT_PASSENGERS });
+    setVehicles({ ...DEFAULT_VEHICLES });
     sessionStorage.removeItem(FORM_STORAGE_KEY);
     sessionStorage.removeItem(SELECTED_DEPARTURE_KEY);
     sessionStorage.removeItem(SELECTED_RETURN_DEPARTURE_KEY);
