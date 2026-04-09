@@ -1,4 +1,5 @@
 import Summary from "@/components/Summary";
+import BackToHomeButton from "@/components/buttons/BackToHomeButton";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -25,6 +26,8 @@ export default async function SummaryPage({
     date: getParam(resolvedSearchParams, "date"),
     returnDate: getParam(resolvedSearchParams, "returnDate"),
     tripType: getParam(resolvedSearchParams, "tripType", "roundtrip"),
+    departureId: getParam(resolvedSearchParams, "departureId"),
+    returnDepartureId: getParam(resolvedSearchParams, "returnDepartureId"),
     adult: getParam(resolvedSearchParams, "adult", "1"),
     child: getParam(resolvedSearchParams, "child", "0"),
     animal: getParam(resolvedSearchParams, "animal", "0"),
@@ -49,6 +52,7 @@ export default async function SummaryPage({
         <div className="content-wrapper page-stack pt-6">
           <h1 className="text-prussian_blue">Oppsummering av turen</h1>
           <Summary data={summaryData} />
+          <BackToHomeButton />
         </div>
       </main>
     </>

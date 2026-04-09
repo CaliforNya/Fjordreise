@@ -1,0 +1,211 @@
+{
+  "departures": [
+    {
+      "id": "berg-stav-0630",
+      "from": "Bergen",
+      "to": "Stavanger",
+      "departureTime": "06:30",
+      "durationMinutes": 345,
+      "baseFare": 225,
+      "tag": "Tidlig morgen"
+    },
+    {
+      "id": "berg-stav-0900",
+      "from": "Bergen",
+      "to": "Stavanger",
+      "departureTime": "09:00",
+      "durationMinutes": 320,
+      "baseFare": 215,
+      "tag": "Ekspress"
+    },
+    {
+      "id": "berg-stav-1230",
+      "from": "Bergen",
+      "to": "Stavanger",
+      "departureTime": "12:30",
+      "durationMinutes": 355,
+      "baseFare": 205,
+      "tag": "Dagferje"
+    },
+    {
+      "id": "berg-stav-1630",
+      "from": "Bergen",
+      "to": "Stavanger",
+      "departureTime": "16:30",
+      "durationMinutes": 330,
+      "baseFare": 198,
+      "tag": "Ettermiddag"
+    },
+    {
+      "id": "berg-stav-2030",
+      "from": "Bergen",
+      "to": "Stavanger",
+      "departureTime": "20:30",
+      "durationMinutes": 335,
+      "baseFare": 188,
+      "tag": "Kveld"
+    },
+    {
+      "id": "berg-stav-2345",
+      "from": "Bergen",
+      "to": "Stavanger",
+      "departureTime": "23:45",
+      "durationMinutes": 310,
+      "baseFare": 168,
+      "tag": "Natt — kortere overfart"
+    },
+    {
+      "id": "stav-berg-0715",
+      "from": "Stavanger",
+      "to": "Bergen",
+      "departureTime": "07:15",
+      "durationMinutes": 340,
+      "baseFare": 218,
+      "tag": "Morgen"
+    },
+    {
+      "id": "stav-berg-1100",
+      "from": "Stavanger",
+      "to": "Bergen",
+      "departureTime": "11:00",
+      "durationMinutes": 325,
+      "baseFare": 208,
+      "tag": "Formiddag"
+    },
+    {
+      "id": "stav-berg-1545",
+      "from": "Stavanger",
+      "to": "Bergen",
+      "departureTime": "15:45",
+      "durationMinutes": 330,
+      "baseFare": 195,
+      "tag": "Ettermiddag"
+    },
+    {
+      "id": "stav-berg-2130",
+      "from": "Stavanger",
+      "to": "Bergen",
+      "departureTime": "21:30",
+      "durationMinutes": 315,
+      "baseFare": 182,
+      "tag": "Sen kveld"
+    },
+    {
+      "id": "berg-hir-0700",
+      "from": "Bergen",
+      "to": "Hirtshals",
+      "departureTime": "07:00",
+      "durationMinutes": 1080,
+      "baseFare": 540,
+      "tag": "Lang overfart — dag"
+    },
+    {
+      "id": "berg-hir-1345",
+      "from": "Bergen",
+      "to": "Hirtshals",
+      "departureTime": "13:45",
+      "durationMinutes": 1020,
+      "baseFare": 505,
+      "tag": "Direkterute"
+    },
+    {
+      "id": "berg-hir-2000",
+      "from": "Bergen",
+      "to": "Hirtshals",
+      "departureTime": "20:00",
+      "durationMinutes": 990,
+      "baseFare": 475,
+      "tag": "Kveldsavgang"
+    },
+    {
+      "id": "berg-hir-2245",
+      "from": "Bergen",
+      "to": "Hirtshals",
+      "departureTime": "22:45",
+      "durationMinutes": 960,
+      "baseFare": 455,
+      "tag": "Nattferje"
+    },
+    {
+      "id": "hir-berg-0830",
+      "from": "Hirtshals",
+      "to": "Bergen",
+      "departureTime": "08:30",
+      "durationMinutes": 1060,
+      "baseFare": 525,
+      "tag": "Morgen"
+    },
+    {
+      "id": "hir-berg-1500",
+      "from": "Hirtshals",
+      "to": "Bergen",
+      "departureTime": "15:00",
+      "durationMinutes": 1010,
+      "baseFare": 495,
+      "tag": "Ettermiddag"
+    },
+    {
+      "id": "hir-berg-2300",
+      "from": "Hirtshals",
+      "to": "Bergen",
+      "departureTime": "23:00",
+      "durationMinutes": 980,
+      "baseFare": 465,
+      "tag": "Natt"
+    },
+    {
+      "id": "stav-hir-0600",
+      "from": "Stavanger",
+      "to": "Hirtshals",
+      "departureTime": "06:00",
+      "durationMinutes": 750,
+      "baseFare": 430,
+      "tag": "Tidlig"
+    },
+    {
+      "id": "stav-hir-1245",
+      "from": "Stavanger",
+      "to": "Hirtshals",
+      "departureTime": "12:45",
+      "durationMinutes": 705,
+      "baseFare": 415,
+      "tag": "Dag"
+    },
+    {
+      "id": "stav-hir-1900",
+      "from": "Stavanger",
+      "to": "Hirtshals",
+      "departureTime": "19:00",
+      "durationMinutes": 735,
+      "baseFare": 398,
+      "tag": "Kveld — populær"
+    },
+    {
+      "id": "hir-stav-0915",
+      "from": "Hirtshals",
+      "to": "Stavanger",
+      "departureTime": "09:15",
+      "durationMinutes": 685,
+      "baseFare": 408,
+      "tag": "Formiddag"
+    },
+    {
+      "id": "hir-stav-1610",
+      "from": "Hirtshals",
+      "to": "Stavanger",
+      "departureTime": "16:10",
+      "durationMinutes": 715,
+      "baseFare": 392,
+      "tag": "Ettermiddag"
+    },
+    {
+      "id": "hir-stav-2145",
+      "from": "Hirtshals",
+      "to": "Stavanger",
+      "departureTime": "21:45",
+      "durationMinutes": 695,
+      "baseFare": 378,
+      "tag": "Sen kveld"
+    }
+  ]
+}

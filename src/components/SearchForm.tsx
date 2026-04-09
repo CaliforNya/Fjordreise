@@ -2,14 +2,32 @@
 
 import pricing from "@/data/pricing.json";
 import RouteDropdown from "@/components/RouteDropdown";
+import ResetFormButton from "@/components/buttons/ResetFormButton";
+import SearchButton from "@/components/buttons/SearchButton";
+import {
+  FORM_STORAGE_KEY,
+  SELECTED_DEPARTURE_KEY,
+  SELECTED_RETURN_DEPARTURE_KEY,
+} from "@/constants/storage";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PORT_OPTIONS = Array.from(
   new Set(pricing.routes.flatMap((route) => [route.from, route.to]))
 );
 type PassengerType = "adult" | "child" | "animal";
 type VehicleType = "car" | "camper" | "motorcycle" | "bicycle";
+type TripType = "roundtrip" | "oneway";
+
+type FormSession = {
+  from: string;
+  to: string;
+  date: string;
+  returnDate: string;
+  tripType: TripType;
+  passengers: Record<PassengerType, number>;
+  vehicles: Record<VehicleType, number>;
+};
 
 export default function SearchForm() {
   const router = useRouter();
@@ -17,22 +35,84 @@ export default function SearchForm() {
     .toISOString()
     .slice(0, 10);
 
-  const [from, setFrom] = useState("Bergen");
-  const [to, setTo] = useState("Stavanger");
-  const [date, setDate] = useState(tomorrow);
-  const [returnDate, setReturnDate] = useState("");
-  const [tripType, setTripType] = useState<"roundtrip" | "oneway">("roundtrip");
-  const [passengers, setPassengers] = useState({
+  const defaultPassengers: Record<PassengerType, number> = {
     adult: 1,
     child: 0,
     animal: 0,
-  });
-  const [vehicles, setVehicles] = useState({
+  };
+  const defaultVehicles: Record<VehicleType, number> = {
     car: 0,
     camper: 0,
     motorcycle: 0,
     bicycle: 0,
-  });
+  };
+
+  const [from, setFrom] = useState("Bergen");
+  const [to, setTo] = useState("Stavanger");
+  const [date, setDate] = useState(tomorrow);
+  const [returnDate, setReturnDate] = useState("");
+  const [tripType, setTripType] = useState<TripType>("roundtrip");
+  const [passengers, setPassengers] = useState(defaultPassengers);
+  const [vehicles, setVehicles] = useState(defaultVehicles);
+  const [isSessionReady, setIsSessionReady] = useState(false);
+
+  useEffect(() => {
+    const raw = sessionStorage.getItem(FORM_STORAGE_KEY);
+    if (!raw) {
+      setIsSessionReady(true);
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as Partial<FormSession>;
+      setFrom(parsed.from ?? "Bergen");
+      setTo(parsed.to ?? "Stavanger");
+      setDate(parsed.date ?? tomorrow);
+      setReturnDate(parsed.returnDate ?? "");
+      setTripType(parsed.tripType === "oneway" ? "oneway" : "roundtrip");
+      setPassengers({
+        adult: Math.max(0, parsed.passengers?.adult ?? defaultPassengers.adult),
+        child: Math.max(0, parsed.passengers?.child ?? defaultPassengers.child),
+        animal: Math.max(0, parsed.passengers?.animal ?? defaultPassengers.animal),
+      });
+      setVehicles({
+        car: Math.max(0, parsed.vehicles?.car ?? defaultVehicles.car),
+        camper: Math.max(0, parsed.vehicles?.camper ?? defaultVehicles.camper),
+        motorcycle: Math.max(
+          0,
+          parsed.vehicles?.motorcycle ?? defaultVehicles.motorcycle
+        ),
+        bicycle: Math.max(0, parsed.vehicles?.bicycle ?? defaultVehicles.bicycle),
+      });
+    } catch {
+      sessionStorage.removeItem(FORM_STORAGE_KEY);
+    } finally {
+      setIsSessionReady(true);
+    }
+  }, [tomorrow]);
+
+  useEffect(() => {
+    if (!isSessionReady) return;
+    const data: FormSession = {
+      from,
+      to,
+      date,
+      returnDate,
+      tripType,
+      passengers,
+      vehicles,
+    };
+    sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
+  }, [
+    from,
+    to,
+    date,
+    returnDate,
+    tripType,
+    passengers,
+    vehicles,
+    isSessionReady,
+  ]);
 
   function updatePassengerCount(type: PassengerType, delta: number) {
     setPassengers((prev) => ({
@@ -123,7 +203,22 @@ export default function SearchForm() {
       params.set("returnDate", returnDate);
     }
 
-    router.push(`/summary?${params.toString()}`);
+    sessionStorage.removeItem(SELECTED_DEPARTURE_KEY);
+    sessionStorage.removeItem(SELECTED_RETURN_DEPARTURE_KEY);
+    router.push(`/results?${params.toString()}`);
+  };
+
+  const handleReset = () => {
+    setFrom("Bergen");
+    setTo("Stavanger");
+    setDate(tomorrow);
+    setReturnDate("");
+    setTripType("roundtrip");
+    setPassengers(defaultPassengers);
+    setVehicles(defaultVehicles);
+    sessionStorage.removeItem(FORM_STORAGE_KEY);
+    sessionStorage.removeItem(SELECTED_DEPARTURE_KEY);
+    sessionStorage.removeItem(SELECTED_RETURN_DEPARTURE_KEY);
   };
 
   return (
@@ -158,16 +253,26 @@ export default function SearchForm() {
 
       <div className="grid grid-cols-1 border-t border-prussian_blue/10 md:grid-cols-2">
         <div className="border-b border-r border-prussian_blue/10 bg-white/70 p-4">
-          <label className="mb-2 block text-sm font-semibold text-prussian_blue/70">
-            Fra
-          </label>
+          <div className="mb-2 flex min-h-10 flex-wrap items-center justify-between gap-2 md:justify-start">
+            <label className="text-sm font-semibold text-prussian_blue/70">
+              Fra
+            </label>
+            <span className="inline-flex md:hidden">
+              <ResetFormButton onClick={handleReset} />
+            </span>
+          </div>
           <RouteDropdown value={from} onChange={setFrom} options={PORT_OPTIONS} />
         </div>
 
         <div className="border-b border-prussian_blue/10 bg-white/70 p-4">
-          <label className="mb-2 block text-sm font-semibold text-prussian_blue/70">
-            Til
-          </label>
+          <div className="mb-2 flex min-h-10 flex-wrap items-center justify-between gap-2">
+            <label className="text-sm font-semibold text-prussian_blue/70">
+              Til
+            </label>
+            <span className="hidden md:inline-flex">
+              <ResetFormButton onClick={handleReset} />
+            </span>
+          </div>
           <RouteDropdown value={to} onChange={setTo} options={PORT_OPTIONS} />
         </div>
 
@@ -292,13 +397,7 @@ export default function SearchForm() {
             {validationMessage}
           </p>
         )}
-        <button
-          onClick={handleSearch}
-          disabled={!canSubmit}
-          className="w-full rounded-full bg-prussian_blue px-6 py-3 text-lg font-semibold text-school_bus_yellow transition hover:bg-regal_navy active:scale-[0.99] active:bg-ink_black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-school_bus_yellow disabled:cursor-not-allowed disabled:bg-prussian_blue/60 disabled:text-gold/80"
-        >
-          Søk
-        </button>
+        <SearchButton onClick={handleSearch} disabled={!canSubmit} />
       </div>
     </section>
   );

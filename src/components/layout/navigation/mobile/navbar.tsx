@@ -1,5 +1,6 @@
 "use client";
 
+import SummaryNavLink from "@/components/layout/navigation/SummaryNavLink";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -50,20 +51,12 @@ export function NavBarMobile() {
               >
                 Home
               </Link>
-              <Link
-                href="/results"
-                onClick={closeMenu}
-                className="block w-full border-b border-prussian_blue/15 px-6 py-3 text-base font-medium text-prussian_blue transition active:bg-school_bus_yellow/30 active:text-ink_black focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-prussian_blue"
-              >
-                Results
-              </Link>
-              <Link
-                href="/summary"
+              <SummaryNavLink
                 onClick={closeMenu}
                 className="block w-full border-b border-prussian_blue/15 px-6 py-3 text-base font-medium text-prussian_blue transition active:bg-school_bus_yellow/30 active:text-ink_black focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-prussian_blue"
               >
                 Summary
-              </Link>
+              </SummaryNavLink>
             </div>
           </div>
         </div>
