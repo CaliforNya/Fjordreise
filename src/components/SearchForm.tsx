@@ -1,8 +1,13 @@
 "use client";
 
+import pricing from "@/data/pricing.json";
 import RouteDropdown from "@/components/RouteDropdown";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+const PORT_OPTIONS = Array.from(
+  new Set(pricing.routes.flatMap((route) => [route.from, route.to]))
+);
 
 export default function SearchForm() {
   const router = useRouter();
@@ -13,19 +18,19 @@ export default function SearchForm() {
   const [returnDate, setReturnDate] = useState("");
   const [tripType, setTripType] = useState<"roundtrip" | "oneway">("roundtrip");
   const [passengers, setPassengers] = useState({
-    voksen: 1,
-    barn: 0,
-    dyr: 0,
+    adult: 1,
+    child: 0,
+    animal: 0,
   });
   const [vehicles, setVehicles] = useState({
-    personbil: 0,
-    bobil: 0,
-    mc: 0,
-    sykkel: 0,
+    car: 0,
+    camper: 0,
+    motorcycle: 0,
+    bicycle: 0,
   });
 
   function updatePassengerCount(
-    type: "voksen" | "barn" | "dyr",
+    type: "adult" | "child" | "animal",
     delta: number
   ) {
     setPassengers((prev) => ({
@@ -35,7 +40,7 @@ export default function SearchForm() {
   }
 
   function updateVehicleCount(
-    vehicle: "personbil" | "bobil" | "mc" | "sykkel",
+    vehicle: "car" | "camper" | "motorcycle" | "bicycle",
     delta: number
   ) {
     setVehicles((prev) => ({
@@ -46,11 +51,22 @@ export default function SearchForm() {
 
   const handleSearch = () => {
     if (!date) return;
-    const totalPeople = passengers.voksen + passengers.barn + passengers.dyr;
+    const params = new URLSearchParams({
+      from,
+      to,
+      date,
+      returnDate,
+      tripType,
+      adult: String(passengers.adult),
+      child: String(passengers.child),
+      animal: String(passengers.animal),
+      car: String(vehicles.car),
+      camper: String(vehicles.camper),
+      motorcycle: String(vehicles.motorcycle),
+      bicycle: String(vehicles.bicycle),
+    });
 
-    router.push(
-      `/results?from=${from}&to=${to}&date=${date}&returnDate=${returnDate}&people=${totalPeople}&tripType=${tripType}`
-    );
+    router.push(`/results?${params.toString()}`);
   };
 
   return (
@@ -85,14 +101,14 @@ export default function SearchForm() {
           <label className="mb-2 block text-sm font-semibold text-prussian_blue/70">
             Fra
           </label>
-          <RouteDropdown value={from} onChange={setFrom} />
+          <RouteDropdown value={from} onChange={setFrom} options={PORT_OPTIONS} />
         </div>
 
         <div className="border-b border-prussian_blue/10 bg-white/70 p-4">
           <label className="mb-2 block text-sm font-semibold text-prussian_blue/70">
             Til
           </label>
-          <RouteDropdown value={to} onChange={setTo} />
+          <RouteDropdown value={to} onChange={setTo} options={PORT_OPTIONS} />
         </div>
 
         <div className="border-b border-r border-prussian_blue/10 bg-white/70 p-4">
@@ -126,9 +142,9 @@ export default function SearchForm() {
           </label>
           <div className="space-y-2 rounded-lg border border-prussian_blue/20 bg-white p-3">
             {[
-              { key: "voksen", label: "Voksen" },
-              { key: "barn", label: "Barn" },
-              { key: "dyr", label: "Dyr" },
+              { key: "adult", label: "Voksen" },
+              { key: "child", label: "Barn" },
+              { key: "animal", label: "Dyr" },
             ].map((item) => (
               <div
                 key={item.key}
@@ -142,7 +158,7 @@ export default function SearchForm() {
                     type="button"
                     onClick={() =>
                       updatePassengerCount(
-                        item.key as "voksen" | "barn" | "dyr",
+                        item.key as "adult" | "child" | "animal",
                         -1
                       )
                     }
@@ -157,7 +173,7 @@ export default function SearchForm() {
                     type="button"
                     onClick={() =>
                       updatePassengerCount(
-                        item.key as "voksen" | "barn" | "dyr",
+                        item.key as "adult" | "child" | "animal",
                         1
                       )
                     }
@@ -177,10 +193,10 @@ export default function SearchForm() {
           </label>
           <div className="space-y-2 rounded-lg border border-prussian_blue/20 bg-white p-3">
             {[
-              { key: "personbil", label: "Personbil" },
-              { key: "bobil", label: "Bobil" },
-              { key: "mc", label: "MC" },
-              { key: "sykkel", label: "Sykkel" },
+              { key: "car", label: "Personbil" },
+              { key: "camper", label: "Bobil" },
+              { key: "motorcycle", label: "MC" },
+              { key: "bicycle", label: "Sykkel" },
             ].map((item) => (
               <div
                 key={item.key}
@@ -194,7 +210,7 @@ export default function SearchForm() {
                     type="button"
                     onClick={() =>
                       updateVehicleCount(
-                        item.key as "personbil" | "bobil" | "mc" | "sykkel",
+                        item.key as "car" | "camper" | "motorcycle" | "bicycle",
                         -1
                       )
                     }
@@ -209,7 +225,7 @@ export default function SearchForm() {
                     type="button"
                     onClick={() =>
                       updateVehicleCount(
-                        item.key as "personbil" | "bobil" | "mc" | "sykkel",
+                        item.key as "car" | "camper" | "motorcycle" | "bicycle",
                         1
                       )
                     }

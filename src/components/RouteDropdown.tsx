@@ -2,17 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const ROUTE_OPTIONS = ["Bergen", "Stavanger", "Hirtshals"] as const;
-
 const dropdownTriggerClass =
   "flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-prussian_blue/30 bg-white px-3 py-2.5 text-left text-lg font-semibold text-ink_black shadow-sm transition hover:border-prussian_blue/55 hover:bg-prussian_blue/[0.04] focus:border-school_bus_yellow focus:outline-none focus:ring-2 focus:ring-school_bus_yellow/40";
 
 type RouteDropdownProps = {
   value: string;
   onChange: (value: string) => void;
+  options: string[];
 };
 
-export default function RouteDropdown({ value, onChange }: RouteDropdownProps) {
+export default function RouteDropdown({
+  value,
+  onChange,
+  options,
+}: RouteDropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -56,7 +59,7 @@ export default function RouteDropdown({ value, onChange }: RouteDropdownProps) {
           role="listbox"
           className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 overflow-hidden rounded-lg border border-prussian_blue/25 bg-white  shadow-xl ring-1 ring-black/5"
         >
-          {ROUTE_OPTIONS.map((opt) => (
+          {options.map((opt) => (
             <li key={opt} role="presentation">
               <button
                 type="button"
