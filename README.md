@@ -1,120 +1,43 @@
-# Next.js Template
+# Fjordreise – rekrutteringsoppgave
 
-A modern Next.js 15 template with TypeScript, Tailwind CSS v4, and best practices setup.
+Dette repositoriet inneholder løsningen min på en rekrutteringsoppgave: en enkel app for å søke etter og oppsummere ferjereiser. Målet har vært å lage en løsning som er lett å bruke, med ryddig kode og fornuftig håndtering av logikk.
 
-## Features
+**Live demo (Vercel):** https://fjordreise-plum.vercel.app/
 
-- Next.js 15 with App Router
-- Tailwind CSS v4
-- TypeScript
-- ESLint + Prettier
-- Responsive navigation (Desktop & Mobile)
-- Path aliases configured (`@/*`)
-- Error handling (error.tsx, not-found.tsx)
-- Loading states (loading.tsx)
+## Slik fungerer appen
 
-## Getting Started
+1. Velg fra/til, dato (og returdato hvis tur/retur), antall reisende og eventuelle kjøretøy.
+2. Trykk «Søk» for å se tilgjengelige avganger.
+3. Velg ønsket avgang (og retur hvis aktuelt).
+4. Gå til «Summary» for å se en oppsummering med pris.
 
-1. Clone this repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Det ligger også en liten «Slik fungerer det»-boks på forsiden.
 
-3. Copy environment variables:
-   ```bash
-   cp .env.example .env
-   ```
+## Validering
 
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
+Jeg har lagt inn validering for blant annet:
+- at fra og til ikke er like
+- at datoer er gyldige
+- at barn/dyr ikke reiser alene
+- at antall kjøretøy gir mening i forhold til antall voksne
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+Så ja – her slipper vi at et barn med 2 dyr prøver å reise med 20 sykler 😄
 
-## Project Structure
+## Hva jeg har fokusert på
 
-```
-src/
-├── app/              # Next.js App Router pages
-│   ├── layout.tsx    # Root layout
-│   ├── page.tsx      # Home page
-│   ├── error.tsx     # Error boundary
-│   ├── not-found.tsx # 404 page
-│   └── loading.tsx   # Loading state
-├── components/       # React components
-│   ├── layout/      # Layout components (Header, Footer)
-│   └── ui/          # UI components (Buttons, Links, etc.)
-└── assets/          # Static assets
-    └── styles/      # Global styles
-```
+- Tydelig og lesbar kode
+- Enkle, gjenbrukbare komponenter
+- God flyt gjennom appen (fra søk til oppsummering)
+- Responsivt design som funker på ulike skjermstørrelser
 
-## Component Guidelines
+## Teknologistack
 
-### Layout Components
-Layout components (Header, Footer, containers) should be placed in `src/components/layout/`
+- Next.js (App Router)
+- React + TypeScript
+- Tailwind CSS
 
-### UI Components
-Reusable UI components (buttons, links, cards) should be placed in `src/components/ui/`
+## Kjøring lokalt
 
-## Scripts
-
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check code formatting
-
-## Deployment
-
-### Vercel (Recommended)
-
-When you create a new project from this template, you can easily deploy it to Vercel:
-
-1. **Connect your GitHub repository to Vercel:**
-   - Go to [vercel.com](https://vercel.com) and sign in with GitHub
-   - Click "Add New Project"
-   - Import your GitHub repository
-   - Vercel will automatically detect Next.js
-
-2. **Automatic Preview Deployments:**
-   - Every Pull Request automatically gets a preview deployment
-   - Preview URL is added as a comment on the PR
-   - Production deployments happen on push to `main` branch
-
-3. **Environment Variables:**
-   - Add your environment variables in Vercel dashboard
-   - Settings → Environment Variables
-   - They'll be available in both preview and production
-
-4. **That's it!** No additional configuration needed. Vercel handles everything automatically.
-
-### Alternative: GitHub Actions Workflow
-
-This template includes a preview deployment workflow (`.github/workflows/preview.yml`). If you prefer to use it instead of Vercel's native integration:
-- Add `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` to GitHub Secrets
-- Get these from Vercel dashboard or CLI
-
-## Troubleshooting
-
-### Tailwind autocomplete not working
-Make sure you have updated Tailwind IntelliSense. If it continues, add this line to your `settings.json`:
-- Open settings with `Ctrl + ,` (Windows) or `Cmd + ,` (Mac)
-- Search for `tailwind css > experimental: config file`
-- Add:
-  ```json
-  "tailwindCSS.experimental.configFile": "src/assets/styles/globals.css"
-  ```
-
-## Tech Stack
-
-- [Next.js 15](https://nextjs.org/)
-- [React 19](https://react.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS v4](https://tailwindcss.com/)
-
-## License
-
-Private - Design by Californya
+```bash
+npm install
+npm run dev
