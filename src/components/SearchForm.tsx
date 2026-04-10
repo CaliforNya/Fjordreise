@@ -148,41 +148,35 @@ export default function SearchForm() {
     passengers.adult < 1 && (passengers.child > 0 || passengers.animal > 0);
   const missingAdultForVehicle =
     passengers.adult < 1 && motorVehicles > 0;
-  const validationMessage = samePorts
-    ? "Velg to ulike steder for Fra og Til."
-    : missingDepartureDate
-      ? "Velg utreisedato for å fortsette."
-      : departureInPast
-        ? "Utreisedato kan ikke være i fortiden."
-      : missingReturnDate
-        ? "Velg returdato for tur/retur."
-        : invalidDateOrder
-          ? "Returdato kan ikke være før utreisedato."
-          : !hasAtLeastOnePaidItem
-            ? "Velg minst ett reisende- eller kjøretøyvalg."
-          : missingAdultCompanion
-            ? "Barn og dyr kan ikke reise alene. Legg til minst 1 voksen."
-            : missingAdultForVehicle
-              ? "Kjøretøy krever minst 1 voksen reisende."
-          : requiresGroupBooking
-            ? "Ved mer enn 10 reisende, kontakt salgsavdelingen for gruppebestilling."
-            : tooManyMotorVehiclesForAdults
-              ? "Bil, bobil og MC kan ikke være flere enn antall voksne."
-              : tooManyBicyclesForPeople
-                ? "Antall sykler kan ikke være høyere enn antall personer (voksne + barn)."
-      : "";
-  const canSubmit =
-    !samePorts &&
-    !missingDepartureDate &&
-    !departureInPast &&
-    !missingReturnDate &&
-    !invalidDateOrder &&
-    hasAtLeastOnePaidItem &&
-    !requiresGroupBooking &&
-    !tooManyMotorVehiclesForAdults &&
-    !tooManyBicyclesForPeople &&
-    !missingAdultCompanion &&
-    !missingAdultForVehicle;
+
+  let validationMessage = "";
+  if (samePorts) validationMessage = "Velg to ulike steder for Fra og Til.";
+  else if (missingDepartureDate)
+    validationMessage = "Velg utreisedato for å fortsette.";
+  else if (departureInPast)
+    validationMessage = "Utreisedato kan ikke være i fortiden.";
+  else if (missingReturnDate)
+    validationMessage = "Velg returdato for tur/retur.";
+  else if (invalidDateOrder)
+    validationMessage = "Returdato kan ikke være før utreisedato.";
+  else if (!hasAtLeastOnePaidItem)
+    validationMessage = "Velg minst ett reisende- eller kjøretøyvalg.";
+  else if (missingAdultCompanion)
+    validationMessage =
+      "Barn og dyr kan ikke reise alene. Legg til minst 1 voksen.";
+  else if (missingAdultForVehicle)
+    validationMessage = "Kjøretøy krever minst 1 voksen reisende.";
+  else if (requiresGroupBooking)
+    validationMessage =
+      "Ved mer enn 10 reisende, kontakt salgsavdelingen for gruppebestilling.";
+  else if (tooManyMotorVehiclesForAdults)
+    validationMessage =
+      "Bil, bobil og MC kan ikke være flere enn antall voksne.";
+  else if (tooManyBicyclesForPeople)
+    validationMessage =
+      "Antall sykler kan ikke være høyere enn antall personer (voksne + barn).";
+
+  const canSubmit = validationMessage === "";
 
   const handleSearch = () => {
     if (!canSubmit) return;
