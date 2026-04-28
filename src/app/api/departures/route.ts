@@ -1,15 +1,6 @@
 import departuresData from "@/data/departures.json";
 import { NextResponse } from "next/server";
-
-type DepartureTemplate = {
-  id: string;
-  from: string;
-  to: string;
-  departureTime: string;
-  durationMinutes: number;
-  baseFare: number;
-  tag?: string;
-};
+import type { DepartureRow } from "@/types/departures";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -24,7 +15,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const list = (departuresData.departures as DepartureTemplate[])
+  const list = (departuresData.departures as DepartureRow[])
     .filter((d) => d.from === from && d.to === to)
     .map((d) => ({
       ...d,
